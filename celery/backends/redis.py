@@ -90,6 +90,12 @@ class RedisBackend(KeyValueStoreBackend):
         }
         if url:
             self.connparams = self._params_from_url(url, self.connparams)
+
+        ssl = _get('REDIS_BACKEND_USE_SSL')
+
+        if ssl:
+            self.connparams['connection_class'] = redis.SSLConnection
+
         self.url = url
         self.expires = self.prepare_expires(expires, type=int)
 
