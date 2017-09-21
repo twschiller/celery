@@ -13,6 +13,8 @@ from functools import partial
 from kombu.utils import cached_property, retry_over_time
 from kombu.utils.url import _parse_url
 
+import ssl
+
 from celery import states
 from celery.canvas import maybe_signature
 from celery.exceptions import ChordError, ImproperlyConfigured
@@ -95,6 +97,7 @@ class RedisBackend(KeyValueStoreBackend):
 
         if ssl:
             self.connparams['connection_class'] = redis.SSLConnection
+            self.connparams['ssl_cert_reqs'] = ssl.CERT_NONE
 
         self.url = url
         self.expires = self.prepare_expires(expires, type=int)
